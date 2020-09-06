@@ -16,22 +16,64 @@
 			padding: 0;
 		}
 
+		h1 {
+			padding-bottom: 10px;
+			line-height: 0em;
+			font-size: 1.2em;
+		}
+
+		h2 {
+			font-size: 0.75em;
+			line-height: 0.25em;
+		}
+
 		#map {
 			position: absolute;
-			top: 0;
-			bottom: 0;
+			top: 0px;
+			bottom: 0px;
 			width: 100%;
+		}
+
+		#features {
+		  position: absolute;
+		  top: 10px;
+		  left: 10px;
+		}
+
+		#legend {
+			position: absolute;
+			bottom: 30px;
+			right: 0px;
+		}
+
+		.map-overlay {
+			background: rgba(255, 255, 255, 0.8);
+		  margin-right: 20px;
+		  font-family: Arial, sans-serif;
+		  overflow: auto;
+		  border-radius: 3px;
+			padding: 10px;
+		}
+
+		.legend-key {
+		  display: inline-block;
+		  border-radius: 20%;
+		  width: 10px;
+		  height: 10px;
 		}
 
 		.mapboxgl-popup-content {
 			max-height: 310px;
 			overflow-y: scroll;
 		}
+
 	</style>
 </head>
 
 <body>
 	<div id="map"></div>
+	<div class='map-overlay' id='features'><h1>Historical Redlining in Des Moines</h1><h2>Map by Jay Bowen - Data from <a href='https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58'>Mapping Inequality</a></h2></div>
+	<div class='map-overlay' id='legend'><h1>HOLC Grades</h1></div>
 	<script>
 		mapboxgl.accessToken = 'pk.eyJ1IjoiamVib3dlMyIsImEiOiJjajY1M3l6bWIxeTQwMndtcXRuN3F4ejFpIn0.aE7P49pqaBKjy2HTOw-tgw';
 
@@ -89,6 +131,28 @@
 		map.on('mouseleave', 'IADesMoines19XX', function() {
 			map.getCanvas().style.cursor = '';
 		});
+
+		// Define layers and colors for the map legend
+		var layers = [' A - Best', ' B - Still Desirable', ' C - Definitely Declining', ' D - Hazardous'];
+		var colors = ['green', 'blue', 'yellow', 'red'];
+
+		// Add content to the legend
+		for (i = 0; i < layers.length; i++) {
+		  var layer = layers[i];
+		  var color = colors[i];
+		  var item = document.createElement('div');
+		  var key = document.createElement('span');
+		  key.className = 'legend-key';
+		  key.style.backgroundColor = color;
+
+		  var value = document.createElement('span');
+		  value.innerHTML = layer;
+		  item.appendChild(key);
+		  item.appendChild(value);
+		  legend.appendChild(item);
+		}
+
+
 	</script>
 
 </body>
