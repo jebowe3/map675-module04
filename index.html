@@ -110,26 +110,27 @@
 					'fill-opacity': 0.4
 				},
 			});
-		});
 
-		// When a click event occurs on a feature in the holc layer, open a popup at the
-		// location of the click, with description HTML from its properties.
-		map.on('click', 'IADesMoines19XX', function(e) {
-			new mapboxgl.Popup()
-				.setLngLat(e.lngLat)
-				.setHTML("HOLC Grade: "  + e.features[0].properties.holc_grade + "<br>" +
-								 "Description: " + e.features[0].properties.area_description_data)
-				.addTo(map);
-		});
+			// When a click event occurs on a feature in the holc layer, open a popup at the
+			// location of the click, with description HTML from its properties.
+			map.on('click', 'IADesMoines19XX', function(e) {
+				new mapboxgl.Popup()
+					.setLngLat(e.lngLat)
+					.setHTML("HOLC Grade: "  + e.features[0].properties.holc_grade + "<br>" +
+									 "Description: " + e.features[0].properties.area_description_data)
+					.addTo(map);
+			});
 
-		// Change the cursor to a pointer when the mouse is over the holc layer.
-		map.on('mouseenter', 'IADesMoines19XX', function() {
-			map.getCanvas().style.cursor = 'pointer';
-		});
+			// Change the cursor to a pointer when the mouse is over the holc layer.
+			map.on('mouseenter', 'IADesMoines19XX', function() {
+				map.getCanvas().style.cursor = 'pointer';
+			});
 
-		// Change it back to a pointer when it leaves.
-		map.on('mouseleave', 'IADesMoines19XX', function() {
-			map.getCanvas().style.cursor = '';
+			// Change it back to a pointer when it leaves.
+			map.on('mouseleave', 'IADesMoines19XX', function() {
+				map.getCanvas().style.cursor = '';
+			});
+
 		});
 
 		// Define layers and colors for the map legend
@@ -138,20 +139,19 @@
 
 		// Add content to the legend
 		for (i = 0; i < layers.length; i++) {
-		  var layer = layers[i];
-		  var color = colors[i];
-		  var item = document.createElement('div');
-		  var key = document.createElement('span');
-		  key.className = 'legend-key';
-		  key.style.backgroundColor = color;
+			var layer = layers[i];
+			var color = colors[i];
+			var item = document.createElement('div');
+			var key = document.createElement('span');
+			key.className = 'legend-key';
+			key.style.backgroundColor = color;
 
-		  var value = document.createElement('span');
-		  value.innerHTML = layer;
-		  item.appendChild(key);
-		  item.appendChild(value);
-		  legend.appendChild(item);
-		}
-
+			var value = document.createElement('span');
+			value.innerHTML = layer;
+			item.appendChild(key);
+			item.appendChild(value);
+			legend.appendChild(item);
+		};
 
 	</script>
 
