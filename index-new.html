@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Display a map</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+	<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+	<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+	<script src='js/mapbox-gl-inspect.js'></script>
+	<link href='css/mapbox-gl-inspect.css' rel='stylesheet' />
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+
+		.mapboxgl-popup-content {
+			max-height: 310px;
+			overflow-y: scroll;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="map"></div>
+	<script>
+		mapboxgl.accessToken = 'pk.eyJ1IjoiamVib3dlMyIsImEiOiJjajY1M3l6bWIxeTQwMndtcXRuN3F4ejFpIn0.aE7P49pqaBKjy2HTOw-tgw';
+
+		const map = new mapboxgl.Map({
+			container: 'map', // container id
+			style: 'mapbox://styles/mapbox/dark-v9', // style URL
+			center: [-93.620833, 41.590833], // starting position [lng, lat]
+			zoom: 12 // starting zoom
+		});
+		/*
+				// add MapboxInspect to the map
+				map.addControl(new MapboxInspect({
+					showInspectMap: true
+				}));
+		*/
+		map.on('load', function() {
+			map.addSource('IADesMoines19XX', { // pop-places references to the source requested here
+				type: 'vector',
+				url: 'mapbox://jebowe3.ckeptb5ws16xg22ogq293flkg-4d69x' // update with your mapbox username and the tileset ID
+			});
+
+			// add places circles
+			map.addLayer({
+				'id': 'IADesMoines19XX', // provide an id for later reference
+				'type': 'fill',
+				'source': 'IADesMoines19XX', // refers to the source name we entered above
+				'source-layer': 'IADesMoines19XX', // refers to the name of the tileset hosted on Mapbox Studio
+				'layout': {},
+				'paint': {
+					'fill-color': ['match',
+						['get', 'holc_grade'],
+						'A', 'green', 'B', 'blue', 'C', 'yellow', 'D', 'red', /* other */ '#ccc'
+					],
+					'fill-opacity': 0.4
+				},
+			});
+		});
+
+		// When a click event occurs on a feature in the holc layer, open a popup at the
+		// location of the click, with description HTML from its properties.
+		map.on('click', 'IADesMoines19XX', function(e) {
+			new mapboxgl.Popup()
+				.setLngLat(e.lngLat)
+				.setHTML("HOLC Grade: "  + e.features[0].properties.holc_grade + "<br>" +
+								 "Description: " + e.features[0].properties.area_description_data)
+				.addTo(map);
+		});
+
+		// Change the cursor to a pointer when the mouse is over the holc layer.
+		map.on('mouseenter', 'IADesMoines19XX', function() {
+			map.getCanvas().style.cursor = 'pointer';
+		});
+
+		// Change it back to a pointer when it leaves.
+		map.on('mouseleave', 'IADesMoines19XX', function() {
+			map.getCanvas().style.cursor = '';
+		});
+	</script>
+
+</body>
+
+</html>
